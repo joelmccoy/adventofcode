@@ -70,15 +70,11 @@ TEST_CASES_GET_SUM_OF_POWERS = [
             "Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
             "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green",
         ],
-        2286
+        2286,
     ),
-    (
-        [
-            "Game 1: 0 red, 0 green, 0 blue"
-        ],
-        0  
-    )
+    (["Game 1: 0 red, 0 green, 0 blue"], 0),
 ]
+
 
 @pytest.mark.parametrize("test_case", TEST_CASES_GET_SUM_OF_POWERS)
 def test_get_sum_of_powers(test_case):

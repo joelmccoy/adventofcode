@@ -96,5 +96,6 @@ def main():
         lines = f.read().splitlines()
         print(get_sum_of_powers(lines))
 
+
 if __name__ == "__main__":
     main()
