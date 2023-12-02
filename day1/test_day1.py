@@ -1,6 +1,6 @@
 import pytest
 
-from main import (
+from day1 import (
     get_digits,
     get_sum,
 )
