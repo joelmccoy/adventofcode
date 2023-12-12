@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 
 SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 INPUT_FILE_PATH = os.path.join(SCRIPT_DIRECTORY, "input.txt")
@@ -67,11 +68,60 @@ def part_1(lines):
     return sum
 
 
+def part_2(lines, expansion_factor=1000000):
+    # get list of rows to expand
+    rows_to_expand = defaultdict(lambda: True)
+    for x in range(len(lines)):
+        for y in range(len(lines[x])):
+            if lines[x][y] == "#":
+                rows_to_expand[x] = False
+                break
+
+    # get list of columns to expand
+    cols_to_expand = defaultdict(lambda: True)
+    for y in range(len(lines[0])):
+        for x in range(len(lines)):
+            if lines[x][y] == "#":
+                cols_to_expand[y] = False
+                break
+
+    # get galaxy coordinates
+    galaxy_coordinates = []
+    row_expansion = 0
+    for x in range(len(lines)):
+        col_expansion = 0
+        for y in range(len(lines[x])):
+            if lines[x][y] == "#":
+                galaxy_coordinates.append((x + row_expansion, y + col_expansion))
+                continue
+            if rows_to_expand[x]:
+                row_expansion += expansion_factor - 1
+                rows_to_expand[x] = False
+            if cols_to_expand[y]:
+                col_expansion += expansion_factor - 1
+
+    # for each galaxy, add up the shortest distances
+    sum = 0
+    for x in range(len(galaxy_coordinates)):
+        for y in range(len(galaxy_coordinates)):
+            if x >= y:
+                continue
+            distance = abs(galaxy_coordinates[x][0] - galaxy_coordinates[y][0]) + abs(
+                galaxy_coordinates[x][1] - galaxy_coordinates[y][1]
+            )
+            sum += distance
+    return sum
+
+
 # save file as input.txt in same directory as this file
 def main():
     with open(INPUT_FILE_PATH) as f:
         lines = f.read().splitlines()
         print(part_1(lines))
+
+    with open(INPUT_FILE_PATH) as f:
+        lines = f.read().splitlines()
+        print(part_2(lines))
 
 
 if __name__ == "__main__":
