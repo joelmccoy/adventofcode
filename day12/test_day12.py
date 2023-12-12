@@ -10,8 +10,8 @@ TEST_CASES_GET_NUM_COMBINATIONS = [
 
 
 @pytest.mark.parametrize("records,contiguous,expected", TEST_CASES_GET_NUM_COMBINATIONS)
-def test_get_number_of_combinations(records, contiguous, expected):
-    assert day12.get_number_of_combinations(records, contiguous) == expected
+def test_get_combinations(records, contiguous, expected):
+    assert len(day12.get_combinations(records, contiguous)) == expected
 
 TEST_CASES_PART_1 = [
     ([
@@ -24,6 +24,6 @@ TEST_CASES_PART_1 = [
     ], 21)
 ]
 
-# @pytest.mark.parametrize("lines,expected", TEST_CASES_PART_1)
-# def test_part_1(lines, expected):
-#     assert day12.part_1(lines) == expected
+@pytest.mark.parametrize("lines,expected", TEST_CASES_PART_1)
+def test_part_1(lines, expected):
+    assert day12.part_1(lines) == expected
