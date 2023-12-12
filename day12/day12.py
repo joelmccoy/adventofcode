@@ -4,6 +4,7 @@ import copy
 SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 INPUT_FILE_PATH = os.path.join(SCRIPT_DIRECTORY, "input.txt")
 
+
 def get_combinations(
     records: str, contiguous: list[int], current_count: int = 0
 ) -> list[str]:
@@ -23,13 +24,15 @@ def get_combinations(
         # pop a match
         if len(contiguous) > 0 and current_count == contiguous[-1]:
             contiguous.pop()
-        elif len(contiguous) > 0 and current_count > 0 and current_count != contiguous[-1]:
-            return []
-        
-        current_count = 0
-        for x in get_combinations(
-            records[1:], contiguous, current_count
+        elif (
+            len(contiguous) > 0
+            and current_count > 0
+            and current_count != contiguous[-1]
         ):
+            return []
+
+        current_count = 0
+        for x in get_combinations(records[1:], contiguous, current_count):
             combinations.append(f".{x}")
 
     elif records[0] == "#":
@@ -38,9 +41,7 @@ def get_combinations(
             return []
         elif current_count > contiguous[-1]:
             return []
-        for x in get_combinations(
-            records[1:], contiguous, current_count
-        ):
+        for x in get_combinations(records[1:], contiguous, current_count):
             combinations.append(f"#{x}")
 
     elif records[0] == "?":
@@ -48,21 +49,17 @@ def get_combinations(
         if len(records) == 1:
             new_with_dot = "."
         else:
-            new_with_dot = f".{records[1:]}"  
-        combinations.extend(get_combinations(
-            new_with_dot, contiguous, current_count
-        ))
+            new_with_dot = f".{records[1:]}"
+        combinations.extend(get_combinations(new_with_dot, contiguous, current_count))
 
         # try with #
         if len(records) == 1:
             new_with_pound = "#"
         else:
             new_with_pound = f"#{records[1:]}"
-        
-        combinations.extend(get_combinations(
-            new_with_pound, contiguous, current_count
-        ))
-        
+
+        combinations.extend(get_combinations(new_with_pound, contiguous, current_count))
+
     return combinations
 
 
@@ -76,11 +73,8 @@ def part_1(lines):
         # needs to be in reverse order
         contiguous = [int(x) for x in split[1].split(",")[::-1]]
         total += len(get_combinations(records, contiguous))
-    
+
     return total
-
-
-
 
 
 # save file as input.txt in same directory as this file
