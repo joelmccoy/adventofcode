@@ -76,12 +76,32 @@ def part_1(lines):
 
     return total
 
+def part_2(lines):
+    total = 0
+    for line in lines:
+        split = line.split(" ")
+        records = ""
+        contiguous = []
+        for _ in range(5):
+            records += split[0] + "?"
+            contiguous.extend([int(x) for x in split[1].split(",")[::-1]])
+        
+        # this will be a stack to maintain the matching of contiguous records
+        # needs to be in reverse order
+        
+        total += len(get_combinations(records, contiguous))
+
+    return total
 
 # save file as input.txt in same directory as this file
 def main():
     with open(INPUT_FILE_PATH) as f:
         lines = f.read().splitlines()
         print(part_1(lines))
+    
+    with open(INPUT_FILE_PATH) as f:
+        lines = f.read().splitlines()
+        print(part_2(lines))
 
 
 if __name__ == "__main__":
