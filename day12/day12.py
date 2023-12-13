@@ -1,15 +1,15 @@
 import os
-import copy
+from functools import cache
 
 SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 INPUT_FILE_PATH = os.path.join(SCRIPT_DIRECTORY, "input.txt")
 
-
+@cache
 def get_combinations(
-    records: str, contiguous: list[int], current_count: int = 0
+    records: str, contiguous: tuple, current_count: int = 0
 ) -> list[str]:
     combinations = []
-    contiguous = copy.deepcopy(contiguous)
+    contiguous = list(contiguous)
 
     # base case
     if len(records) == 0:
@@ -32,7 +32,7 @@ def get_combinations(
             return []
 
         current_count = 0
-        for x in get_combinations(records[1:], contiguous, current_count):
+        for x in get_combinations(records[1:], tuple(contiguous), current_count):
             combinations.append(f".{x}")
 
     elif records[0] == "#":
@@ -41,7 +41,7 @@ def get_combinations(
             return []
         elif current_count > contiguous[-1]:
             return []
-        for x in get_combinations(records[1:], contiguous, current_count):
+        for x in get_combinations(records[1:], tuple(contiguous), current_count):
             combinations.append(f"#{x}")
 
     elif records[0] == "?":
@@ -50,7 +50,7 @@ def get_combinations(
             new_with_dot = "."
         else:
             new_with_dot = f".{records[1:]}"
-        combinations.extend(get_combinations(new_with_dot, contiguous, current_count))
+        combinations.extend(get_combinations(new_with_dot, tuple(contiguous), current_count))
 
         # try with #
         if len(records) == 1:
@@ -58,7 +58,7 @@ def get_combinations(
         else:
             new_with_pound = f"#{records[1:]}"
 
-        combinations.extend(get_combinations(new_with_pound, contiguous, current_count))
+        combinations.extend(get_combinations(new_with_pound, tuple(contiguous), current_count))
 
     return combinations
 
@@ -72,10 +72,11 @@ def part_1(lines):
         # this will be a stack to maintain the matching of contiguous records
         # needs to be in reverse order
         contiguous = [int(x) for x in split[1].split(",")[::-1]]
-        total += len(get_combinations(records, contiguous))
+        total += len(get_combinations(records, tuple(contiguous)))
 
     return total
 
+# this still isn't working...breaks on edge case
 def part_2(lines):
     total = 0
     for line in lines:
@@ -85,9 +86,6 @@ def part_2(lines):
         for _ in range(5):
             records += split[0] + "?"
             contiguous.extend([int(x) for x in split[1].split(",")[::-1]])
-        
-        # this will be a stack to maintain the matching of contiguous records
-        # needs to be in reverse order
         
         total += len(get_combinations(records, contiguous))
 
