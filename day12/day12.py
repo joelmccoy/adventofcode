@@ -4,6 +4,7 @@ from functools import cache
 SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 INPUT_FILE_PATH = os.path.join(SCRIPT_DIRECTORY, "input.txt")
 
+
 @cache
 def get_combinations(
     records: str, contiguous: tuple, current_count: int = 0
@@ -50,7 +51,9 @@ def get_combinations(
             new_with_dot = "."
         else:
             new_with_dot = f".{records[1:]}"
-        combinations.extend(get_combinations(new_with_dot, tuple(contiguous), current_count))
+        combinations.extend(
+            get_combinations(new_with_dot, tuple(contiguous), current_count)
+        )
 
         # try with #
         if len(records) == 1:
@@ -58,7 +61,9 @@ def get_combinations(
         else:
             new_with_pound = f"#{records[1:]}"
 
-        combinations.extend(get_combinations(new_with_pound, tuple(contiguous), current_count))
+        combinations.extend(
+            get_combinations(new_with_pound, tuple(contiguous), current_count)
+        )
 
     return combinations
 
@@ -76,6 +81,7 @@ def part_1(lines):
 
     return total
 
+
 # this still isn't working...breaks on edge case
 def part_2(lines):
     total = 0
@@ -86,17 +92,18 @@ def part_2(lines):
         for _ in range(5):
             records += split[0] + "?"
             contiguous.extend([int(x) for x in split[1].split(",")[::-1]])
-        
+
         total += len(get_combinations(records, contiguous))
 
     return total
+
 
 # save file as input.txt in same directory as this file
 def main():
     with open(INPUT_FILE_PATH) as f:
         lines = f.read().splitlines()
         print(part_1(lines))
-    
+
     with open(INPUT_FILE_PATH) as f:
         lines = f.read().splitlines()
         print(part_2(lines))
