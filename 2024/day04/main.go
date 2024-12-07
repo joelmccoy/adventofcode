@@ -109,10 +109,57 @@ func findNumXmas(puzzle [][]rune) int {
 	return num
 }
 
+func search2(puzzle [][]rune, pos Point) bool {
+	maxX, maxY := len(puzzle[0])-1, len(puzzle)-1
+
+	//out of bounds
+	if pos.X-1 < 0 || pos.Y-1 < 0 || pos.X+1 > maxX || pos.Y+1 > maxY {
+		return false
+	}
+
+	// -1, -1, +1, +1
+	// -1, +1, +1, -1
+	cross := 0
+
+	if puzzle[pos.Y-1][pos.X-1] == 'M' && puzzle[pos.Y+1][pos.X+1] == 'S' || puzzle[pos.Y-1][pos.X-1] == 'S' && puzzle[pos.Y+1][pos.X+1] == 'M' {
+		cross += 1
+	}
+
+	if puzzle[pos.Y-1][pos.X+1] == 'M' && puzzle[pos.Y+1][pos.X-1] == 'S' || puzzle[pos.Y-1][pos.X+1] == 'S' && puzzle[pos.Y+1][pos.X-1] == 'M' {
+		cross += 1
+	}
+
+	if cross == 2 {
+		return true
+	}
+	return false
+}
+
+func findNumXmas2(puzzle [][]rune) int {
+	num := 0
+	for i, row := range puzzle {
+		for j, char := range row {
+			if char == 'A' {
+				pos := Point{X: j, Y: i}
+				if search2(puzzle, pos) {
+					num += 1
+				}
+			}
+		}
+	}
+
+	return num
+}
+
+func sol2(f string) int {
+	return findNumXmas2(getPuzzle(f))
+}
+
 func sol1(f string) int {
 	return findNumXmas(getPuzzle(f))
 }
 
 func main() {
 	fmt.Println(sol1("input.txt"))
+	fmt.Println(sol2("input.txt"))
 }

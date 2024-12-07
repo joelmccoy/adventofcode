@@ -10,3 +10,12 @@ func TestSol1(t *testing.T) {
 		t.Errorf("expected was %d, but got %d", expected, actual)
 	}
 }
+
+func TestSol2(t *testing.T) {
+	expected := 9
+	actual := sol2("sample.txt")
+
+	if actual != expected {
+		t.Errorf("expected was %d, but got %d", expected, actual)
+	}
+}
